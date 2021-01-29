@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameMode.h"
-#include "CommlinkGameMode.generated.h"
+#include "GameFramework/GameState.h"
+#include "CommlinkGameState.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class COMMLINK_API ACommlinkGameMode : public AGameMode
+class COMMLINK_API ACommlinkGameState : public AGameState
 {
 	GENERATED_BODY()
 	
