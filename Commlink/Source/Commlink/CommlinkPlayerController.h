@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Engine/SceneCapture2D.h"
+#include "CommlinkSoundRecordingListener.h"
 #include "CommlinkPlayerController.generated.h"
 
 /**
@@ -13,5 +15,25 @@ UCLASS()
 class COMMLINK_API ACommlinkPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+protected:
+		UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+		FTransform ZoomCameraStartTransform;
+
+		UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<ASceneCapture2D> SceneCaptureClass;
+
+		UPROPERTY(BlueprintReadWrite)
+		ASceneCapture2D* MyZoomCamera;
+
+		UPROPERTY(BlueprintReadWrite)
+		APawn* MyPawn;
+
+		UPROPERTY(EditDefaultsOnly)
+			TSubclassOf<ACommlinkSoundRecordingListener> SoundRecordingListenerClass;
+
+		UPROPERTY(BlueprintReadWrite)
+		class ACommlinkSoundRecordingListener* EnvironmentalListener;
+public:
+	void BeginPlay() override;
 };
