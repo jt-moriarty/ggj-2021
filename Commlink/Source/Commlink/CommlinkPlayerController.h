@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class COMMLINK_API ACommlinkPlayerController : public APlayerController
 {
 	GENERATED_BODY()
@@ -30,10 +30,25 @@ protected:
 		APawn* MyPawn;
 
 		UPROPERTY(EditDefaultsOnly)
-			TSubclassOf<ACommlinkSoundRecordingListener> SoundRecordingListenerClass;
+		TSubclassOf<ACommlinkSoundRecordingListener> SoundRecordingListenerClass;
 
 		UPROPERTY(BlueprintReadWrite)
 		class ACommlinkSoundRecordingListener* EnvironmentalListener;
+
+		UFUNCTION(BlueprintCallable)
+		void CycleRecording();
+
+		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		int RecordingIndex;
+
+		UPROPERTY(BlueprintReadWrite)
+		bool IsListeningToRecording;
+
+
+
 public:
 	void BeginPlay() override;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void SetAudioUI() const;
 };

@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CommlinkGameMode.h"
 #include "CommlinkPlayerController.h"
+#include "CommlinkGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
 void ACommlinkPlayerController::BeginPlay()
@@ -18,5 +18,17 @@ void ACommlinkPlayerController::BeginPlay()
 	ACommlinkGameMode* GameMode = Cast<ACommlinkGameMode>(World->GetAuthGameMode());
 
 
+}
+
+void ACommlinkPlayerController::CycleRecording()
+{
+	RecordingIndex = (RecordingIndex + 1) % EnvironmentalListener->AudioInfos.Num();
+
+	EnvironmentalListener->SetListenIndex(RecordingIndex);
+
+	if (false == IsListeningToRecording) return;
+	
+	SetAudioListenerOverride(nullptr, EnvironmentalListener->GetListenerLocation(RecordingIndex), FRotator::ZeroRotator);
+	SetAudioUI();
 }
 
