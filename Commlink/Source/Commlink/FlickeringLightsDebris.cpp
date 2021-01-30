@@ -23,6 +23,12 @@ void UFlickeringLightsDebris::BeginPlay()
 	
 }
 
+void UFlickeringLightsDebris::FlickerLight()
+{
+	//need
+
+}
+
 
 // Called every frame
 void UFlickeringLightsDebris::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

@@ -204,6 +204,11 @@
             <key type="filename">dude1.3.png</key>
             <key type="filename">dude1.4.png</key>
             <key type="filename">dude1.5.png</key>
+            <key type="filename">dude2.1.png</key>
+            <key type="filename">dude2.2.png</key>
+            <key type="filename">dude2.3.png</key>
+            <key type="filename">dude2.4.png</key>
+            <key type="filename">dude2.5.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -224,6 +229,11 @@
             <filename>dude1.2.png</filename>
             <filename>dude1.3.png</filename>
             <filename>dude1.4.png</filename>
+            <filename>dude2.5.png</filename>
+            <filename>dude2.1.png</filename>
+            <filename>dude2.2.png</filename>
+            <filename>dude2.3.png</filename>
+            <filename>dude2.4.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
