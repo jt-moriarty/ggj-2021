@@ -150,7 +150,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename></filename>
+                <filename>debris_large.paper2dsprites</filename>
             </struct>
         </map>
         <key>multiPack</key>
