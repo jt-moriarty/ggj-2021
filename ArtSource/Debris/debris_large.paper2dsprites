@@ -1,0 +1,31 @@
+{"frames": {
+
+"debrisLarge4.png":
+{
+	"frame": {"x":0,"y":309,"w":165,"h":410},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":165,"h":410},
+	"sourceSize": {"w":165,"h":410},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"debrisLarge5.png":
+{
+	"frame": {"x":0,"y":0,"w":216,"h":309},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":216,"h":309},
+	"sourceSize": {"w":216,"h":309},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"target": "paper2d", 
+	"image": "debris_large.png",
+	"format": "RGBA8888",
+	"size": {"w":216,"h":719},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:2e8bc2b5f950dcd9a5fd486a62aa1e75:644503aa19c7455054dfd64c59878f11:fe5e0147ab400de7e32b520e9237d11e$"
+}
+}
