@@ -31,5 +31,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetListenIndex(int CueIndex);
 
-
+	UPROPERTY(BlueprintReadWrite)
+	TArray<int> RemainingAudioInfosIndices;
 };

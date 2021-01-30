@@ -21,6 +21,8 @@ ACommlinkSoundRecordingListener::ACommlinkSoundRecordingListener()
 	
 	for (int i = 0; i < GameMode->AudioInfos.Num(); i++)
 	{
+		RemainingAudioInfosIndices.Add(i);
+
 		FCommlinkAudioSourceInfo Info = GameMode->AudioInfos[i];
 		AudioInfos.Add(Info);
 
@@ -38,12 +40,11 @@ ACommlinkSoundRecordingListener::ACommlinkSoundRecordingListener()
 			MyAudioComponents.Add(Component);
 		}
 	}
-
 }
 
 FVector ACommlinkSoundRecordingListener::GetListenerLocation(int RecordingIndex) const
 {
-	FCommlinkAudioSourceInfo info = AudioInfos[RecordingIndex];
+	FCommlinkAudioSourceInfo info = AudioInfos[RemainingAudioInfosIndices[RecordingIndex]];
 	if (info.IsInWorld)
 	{
 		return info.ListeningActor->GetActorLocation();

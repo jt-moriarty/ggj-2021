@@ -17,19 +17,12 @@ void ACommlinkPlayerController::BeginPlay()
 
 	ACommlinkGameMode* GameMode = Cast<ACommlinkGameMode>(World->GetAuthGameMode());
 
-
 }
 
 void ACommlinkPlayerController::CycleRecording()
 {
-	RecordingIndex = (RecordingIndex + 1) % EnvironmentalListener->AudioInfos.Num();
-
-	EnvironmentalListener->SetListenIndex(RecordingIndex);
-
-	if (false == IsListeningToRecording) return;
-	
-	SetAudioListenerOverride(nullptr, EnvironmentalListener->GetListenerLocation(RecordingIndex), FRotator::ZeroRotator);
-	SetAudioUI();
+	RecordingIndex = (RecordingIndex + 1) % EnvironmentalListener->RemainingAudioInfosIndices.Num();
+	UseRecordingIndex();
 }
 
 ACommlinkPlayerController::ACommlinkPlayerController()
@@ -39,3 +32,32 @@ ACommlinkPlayerController::ACommlinkPlayerController()
 	bEnableMouseOverEvents = true;
 }
 
+void ACommlinkPlayerController::ReduceCrewRemaining(class AActor* ReferredActor)
+{
+	for (int i = 0;  i<EnvironmentalListener->AudioInfos.Num(); i++)
+	{
+		FCommlinkAudioSourceInfo Info = EnvironmentalListener->AudioInfos[i];
+		if (Info.ListeningActor == ReferredActor)
+		{
+			CrewRemaining--;
+			EnvironmentalListener->RemainingAudioInfosIndices.Remove(i);
+
+			RecordingIndex = RecordingIndex % EnvironmentalListener->RemainingAudioInfosIndices.Num();
+
+			UseRecordingIndex();
+			return;
+		}
+
+	}
+	
+}
+
+void ACommlinkPlayerController::UseRecordingIndex()
+{
+	EnvironmentalListener->SetListenIndex(RecordingIndex);
+
+	if (false == IsListeningToRecording) return;
+
+	SetAudioListenerOverride(nullptr, EnvironmentalListener->GetListenerLocation(RecordingIndex), FRotator::ZeroRotator);
+	SetAudioUI();
+}

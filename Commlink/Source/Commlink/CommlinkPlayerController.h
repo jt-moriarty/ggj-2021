@@ -44,9 +44,15 @@ protected:
 		UPROPERTY(BlueprintReadWrite)
 		bool IsListeningToRecording;
 
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int CrewRemaining;
 
+		void UseRecordingIndex();
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void ReduceCrewRemaining(class AActor* ReferredActor);
+
 	void BeginPlay() override;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
