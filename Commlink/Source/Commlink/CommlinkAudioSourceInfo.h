@@ -23,4 +23,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Commlink")
 	class USoundCue* SoundCue;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Commlink")
+		FText SignalName;
 };
