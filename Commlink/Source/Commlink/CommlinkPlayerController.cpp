@@ -34,13 +34,17 @@ ACommlinkPlayerController::ACommlinkPlayerController()
 
 void ACommlinkPlayerController::ReduceCrewRemaining(class AActor* ReferredActor)
 {
-	for (int i = 0;  i<EnvironmentalListener->AudioInfos.Num(); i++)
+	for (int i = 0;  i<EnvironmentalListener->RemainingAudioInfosIndices.Num(); i++)
 	{
-		FCommlinkAudioSourceInfo Info = EnvironmentalListener->AudioInfos[i];
+		int RealIndex = EnvironmentalListener->RemainingAudioInfosIndices[i];
+		FCommlinkAudioSourceInfo Info = EnvironmentalListener->AudioInfos[RealIndex];
 		if (Info.ListeningActor == ReferredActor)
 		{
 			CrewRemaining--;
-			EnvironmentalListener->RemainingAudioInfosIndices.Remove(i);
+			int CycleIndex = EnvironmentalListener->RemainingAudioInfosIndices.IndexOfByKey(i);
+			EnvironmentalListener->RemainingAudioInfosIndices.RemoveAt(CycleIndex);
+
+			if (i < RecordingIndex) RecordingIndex--;
 
 			RecordingIndex = RecordingIndex % EnvironmentalListener->RemainingAudioInfosIndices.Num();
 
