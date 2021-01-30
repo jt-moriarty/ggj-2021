@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "CommlinkAudioSourceInfo.h"
 #include "CommlinkSoundRecordingListener.generated.h"
 
 UCLASS()
@@ -16,11 +17,19 @@ public:
 	ACommlinkSoundRecordingListener();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+
+	TArray<class UAudioComponent*> MyAudioComponents;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintReadWrite)
+	TArray<FCommlinkAudioSourceInfo> AudioInfos;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		FVector GetListenerLocation(int RecordingIndex) const;
+
+	UFUNCTION(BlueprintCallable)
+		void SetListenIndex(int CueIndex);
+
 
 };
