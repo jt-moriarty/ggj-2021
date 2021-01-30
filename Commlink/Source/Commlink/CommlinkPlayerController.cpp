@@ -17,6 +17,7 @@ void ACommlinkPlayerController::BeginPlay()
 
 	ACommlinkGameMode* GameMode = Cast<ACommlinkGameMode>(World->GetAuthGameMode());
 
+	CrewRemaining = EnvironmentalListener->RemainingAudioInfosIndices.Num();
 }
 
 void ACommlinkPlayerController::CycleRecording()
@@ -34,15 +35,16 @@ ACommlinkPlayerController::ACommlinkPlayerController()
 
 void ACommlinkPlayerController::ReduceCrewRemaining(class AActor* ReferredActor)
 {
-	for (int i = 0;  i<EnvironmentalListener->RemainingAudioInfosIndices.Num(); i++)
+	for (int i = 0;  i<CrewRemaining; i++)
 	{
 		int RealIndex = EnvironmentalListener->RemainingAudioInfosIndices[i];
 		FCommlinkAudioSourceInfo Info = EnvironmentalListener->AudioInfos[RealIndex];
 		if (Info.ListeningActor == ReferredActor)
 		{
-			CrewRemaining--;
 			int CycleIndex = EnvironmentalListener->RemainingAudioInfosIndices.IndexOfByKey(i);
 			EnvironmentalListener->RemainingAudioInfosIndices.RemoveAt(CycleIndex);
+
+			CrewRemaining--;
 
 			if (i < RecordingIndex) RecordingIndex--;
 
