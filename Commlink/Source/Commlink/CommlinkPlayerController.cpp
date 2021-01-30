@@ -32,3 +32,10 @@ void ACommlinkPlayerController::CycleRecording()
 	SetAudioUI();
 }
 
+ACommlinkPlayerController::ACommlinkPlayerController()
+{
+	bShowMouseCursor = true;
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
+}
+

@@ -51,4 +51,6 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetAudioUI() const;
+
+	ACommlinkPlayerController();
 };

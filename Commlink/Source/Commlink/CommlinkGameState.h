@@ -13,5 +13,11 @@ UCLASS()
 class COMMLINK_API ACommlinkGameState : public AGameState
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int CrewFound;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int CargoFound;
 };
