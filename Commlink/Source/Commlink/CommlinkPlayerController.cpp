@@ -20,8 +20,11 @@ void ACommlinkPlayerController::BeginPlay()
 
 void ACommlinkPlayerController::CycleRecording()
 {
-	RecordingIndex = (RecordingIndex + 1) % EnvironmentalListener->RemainingAudioInfosIndices.Num();
-	UseRecordingIndex();
+	if (EnvironmentalListener->RemainingAudioInfosIndices.Num() > 0)
+	{
+		RecordingIndex = (RecordingIndex + 1) % EnvironmentalListener->RemainingAudioInfosIndices.Num();
+		UseRecordingIndex();
+	}
 }
 
 ACommlinkPlayerController::ACommlinkPlayerController()
