@@ -59,4 +59,7 @@ public:
 	void SetAudioUI() const;
 
 	ACommlinkPlayerController();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnMaySubmitReport();
 };

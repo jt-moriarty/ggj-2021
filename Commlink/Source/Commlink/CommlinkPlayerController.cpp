@@ -35,7 +35,7 @@ ACommlinkPlayerController::ACommlinkPlayerController()
 
 void ACommlinkPlayerController::ReduceCrewRemaining(class AActor* ReferredActor)
 {
-	for (int i = 0;  i<CrewRemaining; i++)
+	for (int i = 0; i < CrewRemaining; i++)
 	{
 		int RealIndex = EnvironmentalListener->RemainingAudioInfosIndices[i];
 		FCommlinkAudioSourceInfo Info = EnvironmentalListener->AudioInfos[RealIndex];
@@ -51,9 +51,14 @@ void ACommlinkPlayerController::ReduceCrewRemaining(class AActor* ReferredActor)
 			RecordingIndex = RecordingIndex % EnvironmentalListener->RemainingAudioInfosIndices.Num();
 
 			UseRecordingIndex();
-			return;
+			break;
 		}
 
+	}
+
+	if (CrewRemaining <= 3)
+	{
+		OnMaySubmitReport();
 	}
 	
 }
