@@ -47,6 +47,9 @@ protected:
 		UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		int CrewRemaining;
 
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int MaximumRemainingCrewForReport;
+
 		void UseRecordingIndex();
 
 public:

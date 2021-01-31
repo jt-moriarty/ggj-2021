@@ -56,7 +56,7 @@ void ACommlinkPlayerController::ReduceCrewRemaining(class AActor* ReferredActor)
 
 	}
 
-	if (CrewRemaining <= 3)
+	if (CrewRemaining <= MaximumRemainingCrewForReport)
 	{
 		OnMaySubmitReport();
 	}
