@@ -16,8 +16,6 @@ void ACommlinkPlayerController::BeginPlay()
 		SoundRecordingListenerClass, FVector(0., 0., -20000.),FRotator::ZeroRotator,FActorSpawnParameters());
 
 	ACommlinkGameMode* GameMode = Cast<ACommlinkGameMode>(World->GetAuthGameMode());
-
-	CrewRemaining = EnvironmentalListener->RemainingAudioInfosIndices.Num();
 }
 
 void ACommlinkPlayerController::CycleRecording()
