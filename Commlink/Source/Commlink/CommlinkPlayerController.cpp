@@ -33,8 +33,10 @@ ACommlinkPlayerController::ACommlinkPlayerController()
 	bEnableMouseOverEvents = true;
 }
 
-void ACommlinkPlayerController::AccountFind(class AActor* ReferredActor, bool IsCrew, TArray<FText> AttachedMessages)
+void ACommlinkPlayerController::AccountFind(class AActor* ReferredActor, bool IsCrew, bool IsAlive, TArray<FText> AttachedMessages)
 {
+	if (IsAlive) FoundSurvivor = true;
+
 	if (IsCrew)
 	{
 		for (int i = 0; i < CrewRemaining; i++)

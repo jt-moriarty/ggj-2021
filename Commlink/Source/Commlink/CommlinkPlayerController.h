@@ -62,6 +62,9 @@ protected:
 		int CrewRemaining;
 
 		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool FoundSurvivor;
+
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		int MaximumRemainingCrewForReport;
 
 		UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -77,7 +80,7 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void AccountFind(class AActor* ReferredActor, bool IsCrew, TArray<FText> AttachedMessages);
+	void AccountFind(class AActor* ReferredActor, bool IsCrew, bool IsAlive, TArray<FText> AttachedMessages);
 
 	void BeginPlay() override;
 
