@@ -11,6 +11,20 @@
 /**
  * 
  */
+
+USTRUCT(BlueprintType)
+struct FSequentialMessage
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int index;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FText> MessageLines;
+};
+
 UCLASS(Abstract)
 class COMMLINK_API ACommlinkPlayerController : public APlayerController
 {
@@ -50,11 +64,20 @@ protected:
 		UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		int MaximumRemainingCrewForReport;
 
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int CollectedCargo;
+
 		void UseRecordingIndex();
+
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TArray<FSequentialMessage> SequentialCargoMessages;
+
+		UFUNCTION(BlueprintImplementableEvent)
+		void SendConsoleMessage(const FText& Message);
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void ReduceCrewRemaining(class AActor* ReferredActor);
+	void AccountFind(class AActor* ReferredActor, bool IsCrew, TArray<FText> AttachedMessages);
 
 	void BeginPlay() override;
 

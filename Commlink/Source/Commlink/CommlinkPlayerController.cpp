@@ -33,32 +33,52 @@ ACommlinkPlayerController::ACommlinkPlayerController()
 	bEnableMouseOverEvents = true;
 }
 
-void ACommlinkPlayerController::ReduceCrewRemaining(class AActor* ReferredActor)
+void ACommlinkPlayerController::AccountFind(class AActor* ReferredActor, bool IsCrew, TArray<FText> AttachedMessages)
 {
-	for (int i = 0; i < CrewRemaining; i++)
+	if (IsCrew)
 	{
-		int RealIndex = EnvironmentalListener->RemainingAudioInfosIndices[i];
-		FCommlinkAudioSourceInfo Info = EnvironmentalListener->AudioInfos[RealIndex];
-		if (Info.ListeningActor == ReferredActor)
+		for (int i = 0; i < CrewRemaining; i++)
 		{
-			int CycleIndex = EnvironmentalListener->RemainingAudioInfosIndices.IndexOfByKey(i);
-			EnvironmentalListener->RemainingAudioInfosIndices.RemoveAt(CycleIndex);
+			int RealIndex = EnvironmentalListener->RemainingAudioInfosIndices[i];
+			FCommlinkAudioSourceInfo Info = EnvironmentalListener->AudioInfos[RealIndex];
+			if (Info.ListeningActor == ReferredActor)
+			{
+				int CycleIndex = EnvironmentalListener->RemainingAudioInfosIndices.IndexOfByKey(i);
+				EnvironmentalListener->RemainingAudioInfosIndices.RemoveAt(CycleIndex);
 
-			CrewRemaining--;
+				CrewRemaining--;
 
-			if (i < RecordingIndex) RecordingIndex--;
+				if (i < RecordingIndex) RecordingIndex--;
 
-			RecordingIndex = RecordingIndex % EnvironmentalListener->RemainingAudioInfosIndices.Num();
+				RecordingIndex = RecordingIndex % EnvironmentalListener->RemainingAudioInfosIndices.Num();
 
-			UseRecordingIndex();
-			break;
+				UseRecordingIndex();
+				break;
+			}
+
 		}
 
-	}
+		if (CrewRemaining <= MaximumRemainingCrewForReport)
+		{
+			OnMaySubmitReport();
+		}
 
-	if (CrewRemaining <= MaximumRemainingCrewForReport)
+		for (FText Message : AttachedMessages) SendConsoleMessage(Message);
+	}
+	else
 	{
-		OnMaySubmitReport();
+		CollectedCargo++;
+
+		for (FText Message : AttachedMessages) SendConsoleMessage(Message);
+
+		for (FSequentialMessage MessageItem : SequentialCargoMessages)
+		{
+			if (MessageItem.index == CollectedCargo)
+			{
+				for (FText Message : MessageItem.MessageLines) SendConsoleMessage(Message);
+				break;
+			}
+		}
 	}
 	
 }
