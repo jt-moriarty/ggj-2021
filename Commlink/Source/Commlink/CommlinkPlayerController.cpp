@@ -39,22 +39,31 @@ void ACommlinkPlayerController::AccountFind(class AActor* ReferredActor, bool Is
 
 	if (IsCrew)
 	{
-		for (int i = 0; i < CrewRemaining; i++)
+		CrewRemaining--;
+
+		for (int i = 0; i < EnvironmentalListener->RemainingAudioInfosIndices.Num(); i++)
 		{
 			int RealIndex = EnvironmentalListener->RemainingAudioInfosIndices[i];
 			FCommlinkAudioSourceInfo Info = EnvironmentalListener->AudioInfos[RealIndex];
 			if (Info.ListeningActor == ReferredActor)
 			{
-				int CycleIndex = EnvironmentalListener->RemainingAudioInfosIndices.IndexOfByKey(i);
-				EnvironmentalListener->RemainingAudioInfosIndices.RemoveAt(CycleIndex);
+				EnvironmentalListener->RemainingAudioInfosIndices.RemoveAt(i);
 
-				CrewRemaining--;
+				if (EnvironmentalListener->RemainingAudioInfosIndices.Num() > 0)
+				{
 
-				if (i < RecordingIndex) RecordingIndex--;
+					if (i < RecordingIndex) RecordingIndex--;
 
-				RecordingIndex = RecordingIndex % EnvironmentalListener->RemainingAudioInfosIndices.Num();
+					RecordingIndex = RecordingIndex % EnvironmentalListener->RemainingAudioInfosIndices.Num();
 
-				UseRecordingIndex();
+					UseRecordingIndex();
+				}
+				else
+				{
+					IsListeningToRecording = false;
+					ClearAudioListenerOverride();
+					SetAudioUI();
+				}
 				break;
 			}
 
