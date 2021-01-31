@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class COMMLINK_API ACommlinkGameMode : public AGameMode
 {
 	GENERATED_BODY()

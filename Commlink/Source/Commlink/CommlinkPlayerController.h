@@ -47,6 +47,9 @@ protected:
 		UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		int CrewRemaining;
 
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int MaximumRemainingCrewForReport;
+
 		void UseRecordingIndex();
 
 public:
@@ -59,4 +62,7 @@ public:
 	void SetAudioUI() const;
 
 	ACommlinkPlayerController();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnMaySubmitReport();
 };
