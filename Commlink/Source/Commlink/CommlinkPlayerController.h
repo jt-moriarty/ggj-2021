@@ -30,6 +30,16 @@ class COMMLINK_API ACommlinkPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+	void OnHorizontal(float Amount);
+	void OnVertical(float Amount);
+
+	float movingAverageHorizontal;
+	float movingAverageVertical;
+
+	float DeltaTime;
+
+	void ClampActorLocation();
+
 protected:
 		UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 		FTransform ZoomCameraStartTransform;
@@ -78,11 +88,18 @@ protected:
 		UFUNCTION(BlueprintImplementableEvent)
 		void SendConsoleMessage(const FText& Message);
 
+		virtual void SetupInputComponent() override;
+
+		UFUNCTION(BlueprintImplementableEvent)
+		void UpdateCoords();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void AccountFind(class AActor* ReferredActor, bool IsCrew, bool IsAlive, TArray<FText> AttachedMessages);
 
 	void BeginPlay() override;
+
+	virtual void Tick(float CurrentDeltaTime) override;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void SetAudioUI() const;
@@ -91,4 +108,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void OnMaySubmitReport();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	float MoveSpeed;
 };

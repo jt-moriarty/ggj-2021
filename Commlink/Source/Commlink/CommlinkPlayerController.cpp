@@ -15,7 +15,7 @@ void ACommlinkPlayerController::BeginPlay()
 	EnvironmentalListener = World->SpawnActor<ACommlinkSoundRecordingListener>(
 		SoundRecordingListenerClass, FVector(0., 0., -20000.),FRotator::ZeroRotator,FActorSpawnParameters());
 
-	ACommlinkGameMode* GameMode = Cast<ACommlinkGameMode>(World->GetAuthGameMode());
+	//ACommlinkGameMode* GameMode = Cast<ACommlinkGameMode>(World->GetAuthGameMode());
 }
 
 void ACommlinkPlayerController::CycleRecording()
@@ -27,11 +27,19 @@ void ACommlinkPlayerController::CycleRecording()
 	}
 }
 
-ACommlinkPlayerController::ACommlinkPlayerController()
+ACommlinkPlayerController::ACommlinkPlayerController() : APlayerController()
 {
 	bShowMouseCursor = true;
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true;
+	MoveSpeed = 2000.f;
+}
+
+void ACommlinkPlayerController::Tick(float CurrentDeltaTime)
+{
+	Super::Tick(CurrentDeltaTime);
+
+	DeltaTime = CurrentDeltaTime;
 }
 
 void ACommlinkPlayerController::AccountFind(class AActor* ReferredActor, bool IsCrew, bool IsAlive, TArray<FText> AttachedMessages)
@@ -103,4 +111,51 @@ void ACommlinkPlayerController::UseRecordingIndex()
 
 	SetAudioListenerOverride(nullptr, EnvironmentalListener->GetListenerLocation(RecordingIndex), FRotator::ZeroRotator);
 	SetAudioUI();
+}
+
+void ACommlinkPlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	InputComponent->BindAxis("Horizontal", this, &ACommlinkPlayerController::OnHorizontal);
+	InputComponent->BindAxis("Vertical", this, &ACommlinkPlayerController::OnVertical);
+}
+
+void ACommlinkPlayerController::OnHorizontal(float Amount)
+{
+	if (   (Amount >= 0 && movingAverageHorizontal < 0)
+		|| (Amount <= 0 && movingAverageHorizontal > 0))
+	{
+		movingAverageHorizontal = 0;
+	}
+
+	movingAverageHorizontal = 0.99f * movingAverageHorizontal + 0.01f * (Amount * DeltaTime * MoveSpeed);
+
+	MyPawn->AddActorWorldOffset(FVector::RightVector * movingAverageHorizontal, true); 
+	ClampActorLocation();
+	UpdateCoords();
+}
+
+void ACommlinkPlayerController::OnVertical(float Amount)
+{
+	if (   (Amount >= 0 && movingAverageVertical < 0)
+		|| (Amount <= 0 && movingAverageVertical > 0))
+	{
+		movingAverageVertical = 0;
+	}
+
+	movingAverageVertical = 0.99f * movingAverageVertical + 0.01f * (Amount * DeltaTime * MoveSpeed);
+
+	MyPawn->AddActorWorldOffset(FVector::ForwardVector * movingAverageVertical, true);
+	ClampActorLocation();
+	UpdateCoords();
+}
+
+void ACommlinkPlayerController::ClampActorLocation()
+{
+	FVector PrevLoc = MyPawn->GetActorLocation();
+	FVector NewLoc(PrevLoc.X,
+		FMath::Clamp(PrevLoc.Y, -3300.f, 3300.f),
+		FMath::Clamp(PrevLoc.Z, -3300.f, 3300.f));
+	MyPawn->SetActorLocation(NewLoc);
 }
