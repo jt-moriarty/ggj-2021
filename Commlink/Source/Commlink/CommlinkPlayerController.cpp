@@ -3,10 +3,15 @@
 
 #include "CommlinkPlayerController.h"
 #include "CommlinkGameMode.h"
+#include "CommlinkHUD.h"
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void ACommlinkPlayerController::BeginPlay()
 {
+	VisionIndex = 2;
+	SetMusicIndex(0);
+
 	UWorld* World = GetWorld();
 	MyZoomCamera = World->SpawnActor<ASceneCapture2D>(SceneCaptureClass,ZoomCameraStartTransform);
 	
@@ -16,6 +21,8 @@ void ACommlinkPlayerController::BeginPlay()
 		SoundRecordingListenerClass, FVector(0., 0., -20000.),FRotator::ZeroRotator,FActorSpawnParameters());
 
 	//ACommlinkGameMode* GameMode = Cast<ACommlinkGameMode>(World->GetAuthGameMode());
+
+	MyCommlinkHUD = Cast<ACommlinkHUD>(MyHUD);
 }
 
 void ACommlinkPlayerController::CycleRecording()
@@ -33,6 +40,8 @@ ACommlinkPlayerController::ACommlinkPlayerController() : APlayerController()
 	bEnableClickEvents = true;
 	bEnableMouseOverEvents = true;
 	MoveSpeed = 2000.f;
+
+	MyMusicPlayer = CreateDefaultSubobject<UAudioComponent>(TEXT("My Music Player"));
 }
 
 void ACommlinkPlayerController::Tick(float CurrentDeltaTime)
@@ -119,6 +128,10 @@ void ACommlinkPlayerController::SetupInputComponent()
 
 	InputComponent->BindAxis("Horizontal", this, &ACommlinkPlayerController::OnHorizontal);
 	InputComponent->BindAxis("Vertical", this, &ACommlinkPlayerController::OnVertical);
+	InputComponent->BindAction("Toggle Listen Recording", EInputEvent::IE_Pressed, this, &ACommlinkPlayerController::ToggleListenRecording);
+	InputComponent->BindAction("Cycle Recording", EInputEvent::IE_Pressed, this, &ACommlinkPlayerController::CycleRecording);
+	InputComponent->BindAction("Quit Game", EInputEvent::IE_Pressed, this, &ACommlinkPlayerController::QuitGame);
+	InputComponent->BindAction("Cycle Vision Mode", EInputEvent::IE_Pressed, this, &ACommlinkPlayerController::CycleVisionMode);
 }
 
 void ACommlinkPlayerController::OnHorizontal(float Amount)
@@ -154,8 +167,54 @@ void ACommlinkPlayerController::OnVertical(float Amount)
 void ACommlinkPlayerController::ClampActorLocation()
 {
 	FVector PrevLoc = MyPawn->GetActorLocation();
-	FVector NewLoc(PrevLoc.X,
-		FMath::Clamp(PrevLoc.Y, -3300.f, 3300.f),
-		FMath::Clamp(PrevLoc.Z, -3300.f, 3300.f));
+	FVector NewLoc(
+		FMath::Clamp(PrevLoc.X, -3800.f, 3800.f),
+		FMath::Clamp(PrevLoc.Y, -3800.f, 3800.f),
+		PrevLoc.Z);
 	MyPawn->SetActorLocation(NewLoc);
+}
+
+void ACommlinkPlayerController::ToggleListenRecording()
+{
+	if (IsListeningToRecording)
+	{
+		IsListeningToRecording = false;
+		ClearAudioListenerOverride();
+		SetAudioUI();
+	}
+	else if (EnvironmentalListener->RemainingAudioInfosIndices.Num() > 0)
+	{
+		IsListeningToRecording = true;
+		UseRecordingIndex();
+	}
+}
+
+void ACommlinkPlayerController::QuitGame()
+{
+	FGenericPlatformMisc::RequestExit(false);
+}
+
+void ACommlinkPlayerController::UpdateCoords()
+{
+	FVector DisplayCoords = MyPawn->GetActorLocation() * 0.2f + CoordsOffset;
+
+	MyCommlinkHUD->SetCoords(FMath::RoundHalfFromZero(DisplayCoords.Y), FMath::RoundHalfFromZero(DisplayCoords.X));
+}
+
+void ACommlinkPlayerController::CycleVisionMode()
+{
+	VisionIndex = (VisionIndex + 1) % 3;
+
+	MyCommlinkHUD->SetVisionType(VisionIndex);
+}
+
+void ACommlinkPlayerController::CycleMusicMixIndex()
+{
+	MusicMixIndex = (MusicMixIndex + 1) % 9;
+	SetMusicIndex(MusicMixIndex);
+}
+
+void ACommlinkPlayerController::SetMusicIndex(int MixRatio)
+{
+	MyMusicPlayer->SetFloatParameter("MixParam", 0.1f * MixRatio);
 }

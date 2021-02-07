@@ -90,8 +90,30 @@ protected:
 
 		virtual void SetupInputComponent() override;
 
-		UFUNCTION(BlueprintImplementableEvent)
 		void UpdateCoords();
+
+		void ToggleListenRecording();
+
+		void QuitGame();
+
+		class ACommlinkHUD* MyCommlinkHUD;
+
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+			FVector CoordsOffset;
+
+		void CycleVisionMode();
+
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+			int VisionIndex;
+
+		UFUNCTION(BlueprintCallable)
+			void SetMusicIndex(const int MixRatio);
+
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+			int MusicMixIndex;
+
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		class UAudioComponent* MyMusicPlayer;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -111,4 +133,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float MoveSpeed;
+	
+	UFUNCTION(BlueprintCallable)
+	void CycleMusicMixIndex();
 };
