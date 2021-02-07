@@ -31,9 +31,14 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 		class UAudioComponent* MyAudio;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		class UPaperFlipbookComponent* MyOverlayFlipbook;
+
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 		TArray<FText> SelectionEntries;
 
 public:
 	ASelectableFlipbookActor();
+
+	virtual void PostInitializeComponents() override;
 };
