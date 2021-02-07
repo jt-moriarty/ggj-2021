@@ -85,7 +85,6 @@ protected:
 		UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TArray<FSequentialMessage> SequentialCargoMessages;
 
-		UFUNCTION(BlueprintImplementableEvent)
 		void SendConsoleMessage(const FText& Message);
 
 		virtual void SetupInputComponent() override;
@@ -115,6 +114,9 @@ protected:
 		UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		class UAudioComponent* MyMusicPlayer;
 
+		UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TSubclassOf<UUserWidget> GameoverWidget;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void AccountFind(class AActor* ReferredActor, bool IsCrew, bool IsAlive, TArray<FText> AttachedMessages);
@@ -123,12 +125,12 @@ public:
 
 	virtual void Tick(float CurrentDeltaTime) override;
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void SetAudioUI() const;
+	UFUNCTION(BlueprintCallable)
+	void SetAudioUI();
 
 	ACommlinkPlayerController();
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	UFUNCTION(BlueprintCallable)
 	void OnMaySubmitReport();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -136,4 +138,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void CycleMusicMixIndex();
+
+	UFUNCTION(BlueprintCallable)
+		void OnReportSubmitted();
 };

@@ -20,4 +20,13 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void SetVisionType(const int VisionIndex);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void SetAudioInfo(const FText& SourceName, const FText& SourceType);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void OnMaySubmitReport();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void SendMessage(const FText& Message);
 };

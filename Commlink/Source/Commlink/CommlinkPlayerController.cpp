@@ -4,7 +4,9 @@
 #include "CommlinkPlayerController.h"
 #include "CommlinkGameMode.h"
 #include "CommlinkHUD.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/AudioComponent.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
 void ACommlinkPlayerController::BeginPlay()
@@ -217,4 +219,43 @@ void ACommlinkPlayerController::CycleMusicMixIndex()
 void ACommlinkPlayerController::SetMusicIndex(int MixRatio)
 {
 	MyMusicPlayer->SetFloatParameter("MixParam", 0.1f * MixRatio);
+}
+
+void ACommlinkPlayerController::SetAudioUI()
+{
+	FText SignalName;
+	FText SourceType;
+
+	if (IsListeningToRecording)
+	{
+		SourceType = FText::FromString("SUIT AUDIO");
+
+		int InfoIndex = EnvironmentalListener->RemainingAudioInfosIndices[RecordingIndex];
+		SignalName = EnvironmentalListener->AudioInfos[InfoIndex].SignalName;
+	}
+	else
+	{
+		SourceType = FText::FromString("LOCAL AUDIO");
+
+		SignalName = FText();
+	}
+
+	MyCommlinkHUD->SetAudioInfo(SignalName, SourceType);
+}
+
+void ACommlinkPlayerController::OnMaySubmitReport()
+{
+	MyCommlinkHUD->OnMaySubmitReport();
+}
+
+void ACommlinkPlayerController::OnReportSubmitted()
+{
+	UWidgetLayoutLibrary::RemoveAllWidgets(GetWorld());
+	UUserWidget* Widget = CreateWidget<UUserWidget>(this, GameoverWidget);
+	Widget->AddToViewport();
+}
+
+void ACommlinkPlayerController::SendConsoleMessage(const FText& Message)
+{
+	MyCommlinkHUD->SendMessage(Message);
 }
