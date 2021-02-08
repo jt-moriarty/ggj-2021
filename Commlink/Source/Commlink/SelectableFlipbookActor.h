@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "PaperFlipbookActor.h"
+#include "Components/TimelineComponent.h"
 #include "SelectableFlipbookActor.generated.h"
 
 /**
@@ -14,8 +15,11 @@ class COMMLINK_API ASelectableFlipbookActor : public APaperFlipbookActor
 {
 	GENERATED_BODY()
 
-		UFUNCTION(BlueprintCallable)
+		UFUNCTION()
 		void Select();
+
+	UFUNCTION()
+		void ControlTransparency(float Input);
 
 protected:
 
@@ -37,8 +41,35 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditInstanceOnly)
 		TArray<FText> SelectionEntries;
 
+	UFUNCTION()
+		void OnBeginMouseOver(AActor* TouchedComponent);
+
+	UFUNCTION()
+		void OnEndMouseOver(AActor* TouchedComponent);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool IsHovered;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool IsMouseDown;
+
+	UFUNCTION()
+		void OnScanDown();
+
+	UFUNCTION()
+		void OnScanUp();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		UCurveFloat *SelectTransparencyCurve;
+
+	FTimeline SelectTimeline;
+
 public:
 	ASelectableFlipbookActor();
 
 	virtual void PostInitializeComponents() override;
+
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
 };
