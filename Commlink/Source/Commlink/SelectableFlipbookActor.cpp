@@ -49,11 +49,14 @@ void ASelectableFlipbookActor::BeginPlay()
 
 	EnableInput(GetWorld()->GetFirstPlayerController());
 
-	FInputActionBinding ScanDown = InputComponent->BindAction("scan", IE_Pressed, this, &ASelectableFlipbookActor::OnScanDown);
+	FInputActionBinding& ScanDown = InputComponent->BindAction("scan", IE_Pressed, this, &ASelectableFlipbookActor::OnScanDown);
 	ScanDown.bConsumeInput = false;
 
-	FInputActionBinding ScanUp = InputComponent->BindAction("scan", IE_Released, this, &ASelectableFlipbookActor::OnScanUp);
+	FInputActionBinding& ScanUp = InputComponent->BindAction("scan", IE_Released, this, &ASelectableFlipbookActor::OnScanUp);
 	ScanUp.bConsumeInput = false;
+
+	MyOverlayFlipbook->PlayFromStart();
+	GetRenderComponent()->PlayFromStart();
 }
 
 void ASelectableFlipbookActor::Tick(float DeltaTime)
